@@ -2,7 +2,16 @@ openapi: 3.0.4
 info:
   title: КМТП Universal Tracking - OpenAPI 3.0
   description: |-
-    Сервис отслеживания грузов в порту Корсаков.
+    **Общая информация**  
+    Это сервис отслеживания грузов, проходящих через порт Корсаков.  
+    Сервис позволяет получить общую информацию о грузе, об обработке груза, событиях с грузом.  
+    
+    **О подключении к сервису**  
+    Подключение выполняется с использованием `Basic Auth` по лигину / паролю любого пользователя "1С:     Управление портом". Обратитесь в службу поддержки, если вам нужна новая учетная запись.  
+    *Учетная запись блокируется при отсутствии активности более 45 дней, для её восстановления потребуется обращение в службу поддержки.*  
+    
+    **Об использовании**  
+    Любой ответ сервиса вернется в обертке [ResponseWrapper](#section/Schemas/ResponseWrapper). Для упрощения в примерах обертка не указана.
 
   contact:
     email: v.serokurov@outlook.com
@@ -11,9 +20,19 @@ info:
 servers:
   - url: https://kmtp.info/up/hs/utrack/v1
 
+x-tagGroups:
+  - name: Операции
+    tags:
+      - CargoShipments
+  - name: Описание моделей
+    tags:
+      - Models
+      
 tags:
   - name: CargoShipments
-    description: Грузовые отправления.
+    description: Работа с грузовыми отправлениями
+  - name: Models
+    description: Модели
 
 paths:
   /ping:
@@ -29,23 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                    description: Статус запроса
-                    example: true
-                  result:
-                    type: array
-                    items:
-                      type: string
-                    example: []
-              # Пример для наглядности в документации
-              examples:
-                success:
-                  value:
-                    ok: true
-                    result: []
+                $ref: '#/components/schemas/ResponseWrapper'
   /track:
     get:
       tags:
@@ -203,6 +206,23 @@ paths:
 components:
   schemas:
     
+    ResponseWrapper:
+      x-swagger-router-model: portup.utrack.model.ResponseWrapper
+      type: object
+      description: |
+        Обертка ответа  
+        Любой ответ сервиса вернется в этой обертке
+      properties:
+        ok:
+          type: boolean
+          description: true в случае успешного выполнения запроса
+          example: true
+        result:
+          description: |
+            В случае успешного выполнения запроса - результат  
+            В случае ошибки - string, её описание
+          example: []
+   
     CargoShipment:
       x-swagger-router-model: portup.utrack.model.CargoShipment
       type: object
@@ -331,8 +351,6 @@ components:
           items:
             $ref: '#/components/schemas/ReeferEvent'
           description: 'Массив из ReeferEvent. События обработки рефконтейнера. Только для рефконтейнеров (is_reefer = true)'
-      xml:
-        name: CargoShipment
 
     CargoHandlingSummary:
       x-swagger-router-model: portup.utrack.model.CargoHandlingSummary
@@ -389,8 +407,6 @@ components:
           description: 'Остаток груза в порту на хранении.'
         vessel_port_call:
           $ref: '#/components/schemas/VesselPortCall'
-      xml:
-        name: CargoHandlingSummary
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
@@ -427,8 +443,6 @@ components:
           description: Количество груза.
         cargo_handling_event_location:
           $ref: '#/components/schemas/CargoHandlingEventLocation'
-      xml:
-        name: CargoHandlingEvent
 
     ReeferEvent:
       x-swagger-router-model: portup.utrack.model.ReeferEvent
@@ -454,8 +468,6 @@ components:
             - disconnection
             - temperature_check
             - alarm
-      xml:
-        name: ReeferEvent
 
     CargoHandlingEventLocation:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEventLocation
@@ -472,8 +484,6 @@ components:
           $ref: '#/components/schemas/Yard'
         gate:
           $ref: '#/components/schemas/Gate'
-      xml:
-        name: CargoHandlingEventLocation
 
     VesselPortCall:
       x-swagger-router-model: portup.utrack.model.VesselPortCall
@@ -498,8 +508,6 @@ components:
           $ref: '#/components/schemas/Port'
         port_of_destination:
           $ref: '#/components/schemas/Port'
-      xml:
-        name: VesselPortCall
 
     Vessel:
       x-swagger-router-model: portup.utrack.model.Vessel
@@ -518,8 +526,6 @@ components:
           type: string
           example: 'FKDL'
           description: Позывной
-      xml:
-        name: Vessel
         
     Port:
       x-swagger-router-model: portup.utrack.model.Port
@@ -542,8 +548,6 @@ components:
           type: string
           example: 'RU'
           description: Код страны
-      xml:
-        name: Port
 
     Yard:
       x-swagger-router-model: portup.utrack.model.Yard
@@ -560,9 +564,6 @@ components:
         terminal_title:
           type: string
           example: 'Северный район'
-          
-      xml:
-        name: Yard
         
     Gate:
       x-swagger-router-model: portup.utrack.model.Gate
@@ -582,8 +583,6 @@ components:
           type: string
           example: 'Северный район'
           description: Наименование терминала
-      xml:
-        name: Gate
         
     Vehicle:
       x-swagger-router-model: portup.utrack.model.Vehicle
@@ -602,8 +601,6 @@ components:
           type: string
           example: 'SITRAK БЕЛЫЙ'
           description: Марка, модель
-      xml:
-        name: Vehicle
 
     CargoCategory:
       x-swagger-router-model: portup.utrack.model.CargoCategory
@@ -618,11 +615,9 @@ components:
           type: string
           example: 'Сухой, высокий'
           description: Наименование
-      xml:
-        name: CargoCategory
-        
+       
         
   securitySchemes:
     HttpBasicAuth:
       type: http
-      scheme: basi
+      scheme: basic
