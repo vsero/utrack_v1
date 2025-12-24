@@ -9,7 +9,7 @@ info:
   version: v1
 
 servers:
-  - url: http://localhost/up/hs/utrack/v1
+  - url: https://kmtp.info/up/hs/utrack/v1
 
 tags:
   - name: CargoShipments
@@ -625,4 +625,4 @@ components:
   securitySchemes:
     HttpBasicAuth:
       type: http
-      scheme: basic
+      scheme: basi
