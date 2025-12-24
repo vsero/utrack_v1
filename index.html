@@ -1,90 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
   <head>
     <title>API Documentation</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
-
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #1c2128; /* Цвет фона до загрузки Redoc */
-      }
-    </style>
+    <style>body { margin: 0; padding: 0; }</style>
   </head>
   <body>
-    <div id="redoc-container"></div>
-
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-
-    <script>
-      // Инициализация Redoc
-      Redoc.init(
-        'utrack.yaml', // Путь к YAML-файлу в репозитории
-        {
-          // Настройки темы
-          theme: {
-            colors: {
-              tonalOffset: 0.1,
-              primary: {
-                main: '#58a6ff' // Голубой акцент в стиле GitHub Dark
-              },
-              text: {
-                primary: '#adbac7',
-                secondary: '#768390'
-              },
-              border: {
-                dark: '#444c56',
-                light: '#22272e'
-              },
-              success: {
-                color: '#57ab5a',
-                backgroundColor: '#57ab5a1a'
-              },
-              error: {
-                color: '#f47067',
-                backgroundColor: '#f470671a'
-              },
-              http: {
-                get: '#57ab5a',
-                post: '#347d39',
-                put: '#96d0ff',
-                delete: '#f47067',
-                patch: '#ae7eaf'
-              }
-            },
-            sidebar: {
-              backgroundColor: '#22272e',
-              textColor: '#adbac7'
-            },
-            rightPanel: {
-              backgroundColor: '#1c2128',
-              textColor: '#ffffff'
-            },
-            schema: {
-              nestedBackground: '#2d333b'
-            },
-            typography: {
-              fontSize: '15px',
-              fontFamily: 'Roboto, sans-serif',
-              headings: {
-                fontFamily: 'Montserrat, sans-serif'
-              },
-              code: {
-                backgroundColor: '#2d333b'
-              }
-            }
-          },
-          // Дополнительные настройки интерфейса
-          disableSearch: false, // Включить поиск
-          expandDefaultServerVariables: true,
-          hideDownloadButton: false, // Показывать кнопку скачивания YAML
-          scrollYOffset: 0
-        },
-        document.getElementById('redoc-container')
-      );
-    </script>
+    <redoc spec-url='utrack.yaml'></redoc>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
   </body>
 </html>
