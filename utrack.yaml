@@ -23,11 +23,14 @@ servers:
 x-tagGroups:
   - name: Операции
     tags:
-      - CargoShipments
+      - Tracking
+      - Other
       
 tags:
-  - name: CargoShipments
-    description: Работа с грузовыми отправлениями
+  - name: Tracking
+    description: Отслеживание
+  - name: Other
+    description: Прочее
 
 security:
   - BasicAuth: []
@@ -36,7 +39,7 @@ paths:
   /ping:
     get:
       tags:
-        - CargoShipments
+        - Other
       summary: Проверить доступность
       description: Проверка доступности сервиса
       operationId: ping
@@ -50,7 +53,7 @@ paths:
   /search:
     post:
       tags:
-        - CargoShipments
+        - Tracking
       summary: Найти и отследлить грузовые отправления
       description: Получить информацию используя фильтр поиска грузовых отправлений
       operationId: Search
@@ -58,8 +61,8 @@ paths:
         - name: search_by
           in: query
           description: |
-            bl_number - переданный в body массив является списком номеров коносаментов  
-            label - переданный в body массив является списком маркировок  
+            `bl_number` - переданный в body массив является списком номеров коносаментов  
+            `label` - переданный в body массив является списком маркировок  
             Для контейнерных грузов маркировка - это номер контейнера   
             Для прочих - произвольная строка, если она была задана при регистрации груза
           required: false
@@ -160,7 +163,7 @@ paths:
   /track:
     post:
       tags:
-        - CargoShipments
+        - Tracking
       summary: Отследить грузовые отправления
       description: Получить информацию по uuid грузового отправления
       operationId: track
@@ -180,8 +183,7 @@ paths:
                 format: uuid
               example:
                 - "3584b2d1-a597-11f0-ba8a-a4bf01740731"
-                - "7b45182b-b61f-11f0-ba8c-a4bf01740730"
-                    
+                - "7b45182b-b61f-11f0-ba8c-a4bf01740730"                    
       responses:
         '200':
           description: |
