@@ -301,7 +301,7 @@ components:
           description: |
             Идентификатор типоразмера контейнера  
             10 - морской контейнер 10 футов  
-            20 - морской контейнер 20 футов
+            20 - морской контейнер 20 футов  
             30 - морской контейнер 30 футов  
             40 - морской контейнер 40 футов  
             45 - морской контейнер 45 футов  
@@ -318,7 +318,11 @@ components:
         quantity_unit:
           type: string
           example: 'PC'
-          description: 'Единица измерения, в которой ведется учет груза. Штучные грузы всегда считаются количеством мест (PC). Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (KG). Объемные грузы в кубометрах (CM).'
+          description: |
+            Единица измерения, в которой ведется учет груза.  
+            Штучные грузы всегда считаются количеством мест (PC).  
+            Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (KG).  
+            Объемные грузы в кубометрах (CM).
           enum:
             - PC
             - KG
@@ -351,43 +355,51 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CargoHandlingEvent'
-          description: 'Массив из CargoHandlingEvent. События грузообработки.'
+          description: |
+            array из CargoHandlingEvent  
+            События обработки груза
         reefer_events:
           type: array
           items:
             $ref: '#/components/schemas/ReeferEvent'
-          description: 'Массив из ReeferEvent. События обработки рефконтейнера. Только для рефконтейнеров (is_reefer = true)'
+          description: |
+            array из ReeferEvent  
+            События обработки рефконтейнера  
+            Только для рефконтейнеров (is_reefer = true)'
 
     CargoHandlingSummary:
       x-swagger-router-model: portup.utrack.model.CargoHandlingSummary
       type: object
-      description: 'Сводные данные об обработке груза.'
+      description: 'Сводные данные об обработке груза'
       properties:
         is_started:
           type: boolean
-          description: Обработка груза начата.
+          description: Обработка груза начата
         is_started_timestamp:
           type: string
           format: date-time
           example: '2025-10-10T16:08:40+11:00'
-          description: Дата начала обработки.
+          description: Дата начала обработки
         is_finished:
           type: boolean
-          description: Обработка груза завершена.
+          description: Обработка груза завершена
         is_finished_timestamp:
           type: string
           format: date-time
           example: '2025-10-10T16:08:40+11:00'
-          description: Дата окончания обработки.
+          description: Дата окончания обработки
         cargo_flow:
           type: string
-          description: "Направление движения груза: На сушу (inbound) или На море (outbound)."
+          description: "Направление движения груза: На сушу (`inbound`) или На море (`outbound`)"
           enum:
             - inbound
             - outbound
         transshipment_type:
           type: string
-          description: "Тип перевалки: Внутрипортовая, с помещением на площадку (in-port) или Прямая, минуя площадку (direct)."
+          description: |
+            Тип перевалки:  
+            Внутрипортовая (`in-port`) - с помещением груза на площадку  
+            Прямая (`direct`) - без помещения груза на площадку (перевалка с судна на машину или с машины на судно)
           enum:
             - "in-port"
             - "direct"
@@ -429,12 +441,12 @@ components:
           example: unloading
           description: |
             Тип события:  
-            unloading - выгрузка  
-            loading - погрузка  
-            gate-in - завоз через КПП  
-            gate-out - вывоз через КПП  
-            yard-in - помещение на площадку  
-            yard-out - снятие с площадки
+            `unloading` - выгрузка  
+            `loading` - погрузка  
+            `gate-in` - завоз через КПП  
+            `gate-out` - вывоз через КПП  
+            `yard-in` - помещение на площадку  
+            `yard-out` - снятие с площадки
           enum:
             - unloading
             - loading
@@ -454,8 +466,8 @@ components:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEventLocation
       type: object
       description: |
-        Место грузообработки.  
-        Объект будет содержать только одно из нижеперечисленных свойств.
+        Место грузообработки  
+        Объект будет содержать только одно из нижеперечисленных свойств
       properties:
         vehicle:
           $ref: '#/components/schemas/Vehicle'
@@ -469,7 +481,7 @@ components:
     ReeferEvent:
       x-swagger-router-model: portup.utrack.model.ReeferEvent
       type: object
-      description: 'Событие обработки рефконтейнера.'
+      description: 'Событие обработки рефконтейнера'
       properties:
         event_timestamp:
           type: string
@@ -481,10 +493,10 @@ components:
           example: temperature_check
           description: |
             Тип события:  
-            connection- подключение  
-            disconnection - отключение  
-            temperature_check- контроль температуры  
-            alarm - тревога, авария  
+            `connection` - подключение  
+            `disconnection` - отключение  
+            `temperature_check` - контроль температуры  
+            `alarm` - тревога, авария  
           enum:
             - connection
             - disconnection
@@ -503,7 +515,7 @@ components:
         voyage_number:
           type: string
           example: '2545/2562'
-          description: Номер рейса / рейсов
+          description: 'Номер рейса / рейсов'
         title:
           type: string
           example: '2545/2562 СИМУШИР'
@@ -523,7 +535,7 @@ components:
         uuid:
           type: string
           example: '8491c51c-f492-11ef-ba81-a4bf01740731'
-          description: Внутренний уникальный идентификатор
+          description: Уникальный идентификатор
         title:
           type: string
           example: 'К.МАЛАХОВ'
@@ -541,7 +553,7 @@ components:
         uuid:
           type: string
           example: '101676e1-ed59-11e4-bf39-74d02b359c77'
-          description: Внутренний уникальный идентификатор
+          description: Уникальный идентификатор
         title:
           type: string
           example: 'Vladivostok'
@@ -574,7 +586,7 @@ components:
     Gate:
       x-swagger-router-model: portup.utrack.model.Gate
       type: object
-      description: Контрольно-пропускной пункт
+      description: 'Контрольно-пропускной пункт'
       properties:
         title:
           type: string
@@ -616,7 +628,9 @@ components:
         internal_code:
           type: string
           example: 'HC'
-          description: Внутренний уникальный код. Для морских контейнеров используются коды ISO.
+          description: |
+            Внутренний уникальный код  
+            Для морских контейнеров используются коды ISO
         title:
           type: string
           example: 'Сухой, высокий'
@@ -628,5 +642,5 @@ components:
       type: http
       scheme: basic
       description: |
-        Авторизация по стандарту HTTP Basic. 
-        Передайте логин и пароль в заголовке Authorization.
+        Авторизация по стандарту HTTP Basic 
+        Передайте логин и пароль в заголовке Authorization
