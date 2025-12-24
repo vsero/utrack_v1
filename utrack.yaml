@@ -24,15 +24,13 @@ x-tagGroups:
   - name: Операции
     tags:
       - CargoShipments
-  - name: Описание моделей
-    tags:
-      - Models
       
 tags:
   - name: CargoShipments
     description: Работа с грузовыми отправлениями
-  - name: Models
-    description: Модели
+
+security:
+  - BasicAuth: []
 
 paths:
   /ping:
@@ -50,7 +48,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseWrapper'
   /track:
-    get:
+    post:
       tags:
         - CargoShipments
       summary: Отследить грузовые отправления
@@ -94,7 +92,7 @@ paths:
           description: Unexpected error  
 
   /search:
-    get:
+    post:
       tags:
         - CargoShipments
       summary: Найти и отследлить грузовые отправления
@@ -444,6 +442,22 @@ components:
         cargo_handling_event_location:
           $ref: '#/components/schemas/CargoHandlingEventLocation'
 
+    CargoHandlingEventLocation:
+      x-swagger-router-model: portup.utrack.model.CargoHandlingEventLocation
+      type: object
+      description: |
+        Место грузообработки.  
+        Объект будет содержать только одно из нижеперечисленных свойств.
+      properties:
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        vessel:
+          $ref: '#/components/schemas/Vessel'
+        yard:
+          $ref: '#/components/schemas/Yard'
+        gate:
+          $ref: '#/components/schemas/Gate'
+
     ReeferEvent:
       x-swagger-router-model: portup.utrack.model.ReeferEvent
       type: object
@@ -468,23 +482,7 @@ components:
             - disconnection
             - temperature_check
             - alarm
-
-    CargoHandlingEventLocation:
-      x-swagger-router-model: portup.utrack.model.CargoHandlingEventLocation
-      type: object
-      description: |
-        Место грузообработки.  
-        Объект будет содержать только одно из нижеперечисленных свойств.
-      properties:
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        vessel:
-          $ref: '#/components/schemas/Vessel'
-        yard:
-          $ref: '#/components/schemas/Yard'
-        gate:
-          $ref: '#/components/schemas/Gate'
-
+        
     VesselPortCall:
       x-swagger-router-model: portup.utrack.model.VesselPortCall
       type: object
@@ -618,6 +616,9 @@ components:
        
         
   securitySchemes:
-    HttpBasicAuth:
+    BasicAuth: # Имя схемы, которое мы используем в блоке security
       type: http
       scheme: basic
+      description: |
+        Авторизация по стандарту HTTP Basic. 
+        Передайте логин и пароль в заголовке Authorization.
