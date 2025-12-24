@@ -132,13 +132,13 @@ paths:
                 type: string
             examples:
               search_by_label:
-                summary: Номера контейнеров (search_by = label)
+                summary: 'Номера контейнеров (search_by = label)'
                 value:
                   - "FITU5542380"
                   - "KUUU6041493"
                   - "WBPU1962467"
               search_by_bl_number:
-                summary: Номера коносаментов (search_by = bl_number)
+                summary: 'Номера коносаментов (search_by = bl_number)'
                 value:
                   - "ЭД786665"
                   - "ЭЕ011355"
@@ -159,8 +159,10 @@ paths:
           description: Invalid input
         '422':
           description: Validation exception
-        default:
+        '500':
           description: Unexpected error 
+        default:
+          description: '500 Unexpected error' 
   
   /track:
     post:
@@ -202,8 +204,10 @@ paths:
           description: Invalid input
         '422':
           description: Validation exception
+        '500':
+          description: Unexpected error
         default:
-          description: Unexpected error  
+          description: '500 Unexpected error'  
   
 components:
   schemas:
