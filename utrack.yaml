@@ -47,50 +47,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseWrapper'
-  /track:
-    post:
-      tags:
-        - CargoShipments
-      summary: Отследить грузовые отправления
-      description: Получить информацию по uuid грузового отправления
-      operationId: track
-      requestBody:
-        required: true
-        description: |
-          array из uuid CargoShipment  
-          максимум 100 элементов
-        content:
-          application/json:
-            schema:
-              type: array
-              minItems: 1
-              maxItems: 100
-              items:
-                type: string
-                format: uuid
-              example:
-                - "3584b2d1-a597-11f0-ba8a-a4bf01740731"
-                - "7b45182b-b61f-11f0-ba8c-a4bf01740730"
-                    
-      responses:
-        '200':
-          description: |
-            successful operation  
-            array из CargoShipment  
-            Новые грузы расположены в начале
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CargoShipment'
-        '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
-        default:
-          description: Unexpected error  
-
   /search:
     post:
       tags:
@@ -201,6 +157,50 @@ paths:
         default:
           description: Unexpected error 
   
+  /track:
+    post:
+      tags:
+        - CargoShipments
+      summary: Отследить грузовые отправления
+      description: Получить информацию по uuid грузового отправления
+      operationId: track
+      requestBody:
+        required: true
+        description: |
+          array из uuid CargoShipment  
+          максимум 100 элементов
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                type: string
+                format: uuid
+              example:
+                - "3584b2d1-a597-11f0-ba8a-a4bf01740731"
+                - "7b45182b-b61f-11f0-ba8c-a4bf01740730"
+                    
+      responses:
+        '200':
+          description: |
+            successful operation  
+            array из CargoShipment  
+            Новые грузы расположены в начале
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CargoShipment'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        default:
+          description: Unexpected error  
+  
 components:
   schemas:
     
@@ -219,7 +219,7 @@ components:
           description: |
             В случае успешного выполнения запроса - результат  
             В случае ошибки - string, её описание
-          example: []
+          example: {}
    
     CargoShipment:
       x-swagger-router-model: portup.utrack.model.CargoShipment
