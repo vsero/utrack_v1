@@ -25,58 +25,61 @@
         'utrack.yaml', // Путь к YAML-файлу в репозитории
         {
           // Настройки темы
-          theme: {
-            colors: {
-              tonalOffset: 0.1,
-              primary: {
-                main: '#58a6ff' // Голубой акцент в стиле GitHub Dark
-              },
-              text: {
-                primary: '#adbac7',
-                secondary: '#ffffff'
-              },
-              border: {
-                dark: '#676D75',
-                light: '#22272e'
-              },
-              success: {
-                color: '#57ab5a',
-                backgroundColor: '#57ab5a1a'
-              },
-              error: {
-                color: '#f47067',
-                backgroundColor: '#f470671a'
-              },
-              http: {
-                get: '#57ab5a',
-                post: '#347d39',
-                put: '#96d0ff',
-                delete: '#f47067',
-                patch: '#ae7eaf'
-              }
-            },
-            sidebar: {
-              backgroundColor: '#22272e',
-              textColor: '#adbac7'
-            },
-            rightPanel: {
-              backgroundColor: '#1c2128',
-              textColor: '#ffffff'
-            },
-            schema: {
-              nestedBackground: '#2d333b'
-            },
-            typography: {
-              fontSize: '15px',
-              fontFamily: 'Roboto, sans-serif',
-              headings: {
-                fontFamily: 'Montserrat, sans-serif'
-              },
-              code: {
-                backgroundColor: '#2d333b'
-              }
-            }
-          },
+			theme: {
+			  colors: {
+				tonalOffset: 0.1,
+				primary: {
+				  main: '#58a6ff'
+				},
+				text: {
+				  primary: '#e1e7ed',   // Сделали основной текст еще светлее
+				  secondary: '#aab4be' // Текст схем и меток (Request Body) стал читаемым
+				},
+				border: {
+				  dark: '#444c56',      // Линии разделения стали светлее
+				  light: '#373e47'      // Второстепенные разделители
+				},
+				success: {
+				  color: '#57ab5a',
+				  backgroundColor: '#57ab5a1a'
+				},
+				error: {
+				  color: '#f47067',
+				  backgroundColor: '#f470671a'
+				},
+				http: {
+				  get: '#57ab5a',
+				  post: '#347d39',
+				  put: '#96d0ff',
+				  delete: '#f47067',
+				  patch: '#ae7eaf'
+				}
+			  },
+			  sidebar: {
+				backgroundColor: '#22272e',
+				textColor: '#adbac7',
+				// Добавим явную границу для бокового меню, чтобы оно не сливалось
+				borderColor: '#444c56' 
+			  },
+			  rightPanel: {
+				backgroundColor: '#1c2128',
+				textColor: '#ffffff',
+				width: '40%' // Можно немного расширить панель с кодом
+			  },
+			  schema: {
+				nestedBackground: '#2d333b',
+				typeNameColor: '#58a6ff', // Цвет названий типов (string, object)
+				typeTitleColor: '#adbac7'  // Цвет заголовков внутри схем
+			  },
+			  typography: {
+				fontSize: '15px',
+				lineHeight: '1.5',
+				code: {
+				  color: '#ff7b72', // Цвет самого кода (чуть розоватый для контраста)
+				  backgroundColor: '#2d333b'
+				}
+			  }
+			}
           // Дополнительные настройки интерфейса
           disableSearch: false, // Включить поиск
           expandDefaultServerVariables: true,
@@ -88,4 +91,3 @@
     </script>
   </body>
 </html>
-
