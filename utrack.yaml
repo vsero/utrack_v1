@@ -321,9 +321,9 @@ components:
           example: 'PC'
           description: |
             Единица измерения, в которой ведется учет груза.  
-            Штучные грузы всегда считаются количеством мест (PC).  
-            Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (KG).  
-            Объемные грузы в кубометрах (CM).
+            Штучные грузы всегда считаются количеством мест (`PC`).  
+            Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (`KG`).  
+            Объемные грузы в кубометрах (`CM`).
           enum:
             - PC
             - KG
@@ -332,12 +332,12 @@ components:
           type: number
           format: decimal
           example: 1
-          description: Заявленное количество груза, выраженное в quantity_unit
+          description: 'Заявленное количество груза, выраженное в `quantity_unit`'
         total_pieces:
           type: integer
           format: int
           example: 1
-          description: 'Заявленное количество мест (если есть)'
+          description: 'Заявленное количество мест (0 если груз не делится на места)'
         total_weight:
           type: number
           format: decimal
@@ -408,35 +408,35 @@ components:
           type: string
           format: date-time
           example: '2025-10-10T16:08:40+11:00'
-          description: Дата начала хранения.
+          description: Дата начала хранения
         storage_end_timestamp:
           type: string
           format: date-time
           example: '2025-10-10T16:08:40+11:00'
-          description: Дата окончания хранения.
+          description: Дата окончания хранения
         remaining_quantity_vessel:
           type: number
           format: decimal
           example: 0
-          description: 'Остаток груза на судне.'
+          description: 'Остаток груза на судне'
         remaining_quantity_yard:
           type: number
           format: decimal
           example: 1
-          description: 'Остаток груза в порту на хранении.'
+          description: 'Остаток груза в порту на хранении'
         vessel_port_call:
           $ref: '#/components/schemas/VesselPortCall'
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
       type: object
-      description: 'Событие грузообработки.'
+      description: 'Событие грузообработки'
       properties:
         event_timestamp:
           type: string
           format: date-time
           example: '2025-10-21T01:00:43+11:00'
-          description: Дата события.
+          description: Дата события
         cargo_handling_event_type:
           type: string
           example: unloading
@@ -459,7 +459,7 @@ components:
           type: number
           format: decimal
           example: 1
-          description: Количество груза.
+          description: Количество груза
         cargo_handling_event_location:
           $ref: '#/components/schemas/CargoHandlingEventLocation'
 
@@ -488,7 +488,7 @@ components:
           type: string
           format: date-time
           example: '2025-10-21T01:00:43+11:00'
-          description: Дата события.
+          description: Дата события
         reefer_event_type:
           type: string
           example: temperature_check
@@ -627,7 +627,7 @@ components:
     CargoCategory:
       x-swagger-router-model: portup.utrack.model.CargoCategory
       type: object
-      description: Вид груза.
+      description: Вид груза
       properties:
         internal_code:
           type: string
