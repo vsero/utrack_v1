@@ -54,8 +54,10 @@ paths:
     post:
       tags:
         - Tracking
-      summary: Найти и отследлить грузовые отправления
-      description: Получить информацию используя фильтр поиска грузовых отправлений
+      summary: 'Получить информацию используя фильтр поиска грузовых отправлений'
+      description: |
+        В теле передаются строки для поиска  
+        Уточняющие условия, если они нужны, передаются в параметрах
       operationId: Search
       parameters:
         - name: search_by
@@ -164,8 +166,8 @@ paths:
     post:
       tags:
         - Tracking
-      summary: Отследить грузовые отправления
-      description: Получить информацию по uuid грузового отправления
+      summary: 'Получить информацию по uuid грузового отправления'
+      description: 'В теле передается список uuid полученных ранее с помощью /search'
       operationId: track
       requestBody:
         required: true
