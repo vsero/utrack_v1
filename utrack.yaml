@@ -649,7 +649,7 @@ components:
           type: string
           example: 'HC'
           description: |
-            Уникальный код 
+            Уникальный код   
             Для морских контейнеров используются коды ISO
         title:
           type: string
