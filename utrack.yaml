@@ -177,7 +177,27 @@ paths:
         '500':
           description: Unexpected error 
         default:
-          description: '500 Unexpected error' 
+          description: '500 Unexpected error'
+      
+      x-codeSamples:
+        - lang: 'HTTP'
+          label: 'Поиск груженых контейнеров с моря по номерам'
+          source: |
+            POST /search?is_empty_container_unit=false&cargo_flow=inbound
+            Content-Type: application/json
+
+            [
+            "FITU5542380",
+            "KUUU6041493",
+            "WBPU1962467"
+            ]
+        - lang: 'HTTP'
+          label: 'Поиск по коносаменту'
+          source: |
+            POST /search?search_by=bl_number
+            Content-Type: application/json
+
+            ["ЭД786665"]
   
   /track:
     post:
