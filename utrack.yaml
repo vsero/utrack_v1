@@ -7,8 +7,10 @@ info:
     Это сервис отслеживания грузов, проходящих через порт Корсаков.  
     Сервис позволяет получить общую информацию о грузе, об обработке груза, о событиях с грузом.  
     
-    **О подключении к сервису**  
-    Подключение выполняется с использованием `BasicAuth` по лигину / паролю. Обратитесь в службу поддержки, если вам нужна учетная запись.  
+    **О подключении**  
+    Подключение выполняется с использованием токена доступа.  
+    Токен передается в заголовках ключем `X-Api-Key`.  
+    Свяжитесь со службой поддержки, чтобы получить новый токен.  
     
     **Об использовании**  
     Любой ответ сервиса вернется в обертке [ResponseWrapper (см. /Ping)](#tag/Other/operation/ping). Для упрощения в примерах обертка не указана.  
@@ -29,7 +31,7 @@ info:
     url: https://kmtp.ru
 
 servers:
-  - url: https://kmtp.info/up/hs/utrackv1
+  - url: https://kmtp.info/upapi/hs/utrackv1
 
 x-tagGroups:
   - name: Endpoints
@@ -49,7 +51,7 @@ tags:
 
 
 security:
-  - BasicAuth: []
+  - ApiKeyAuth: []
 
 paths:
   /ping:
@@ -705,9 +707,8 @@ components:
        
         
   securitySchemes:
-    BasicAuth: # Имя схемы, которое мы используем в блоке security
-      type: http
-      scheme: basic
-      description: |
-        Авторизация по стандарту HTTP Basic 
-        Передайте логин и пароль в заголовке Authorization
+    ApiKeyAuth:        
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: 'Ваш токен доступа'
