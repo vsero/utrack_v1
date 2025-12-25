@@ -1,21 +1,32 @@
 openapi: 3.0.4
 info:
   title: КМТП Universal Tracking - OpenAPI 3.0
-  description: |-
+  version: v1
+  description: |
     **Общая информация**  
     Это сервис отслеживания грузов, проходящих через порт Корсаков.  
-    Сервис позволяет получить общую информацию о грузе, об обработке груза, событиях с грузом.  
+    Сервис позволяет получить общую информацию о грузе, об обработке груза, о событиях с грузом.  
     
     **О подключении к сервису**  
-    Подключение выполняется с использованием `BasicAuth` по лигину / паролю любого пользователя "1С:     Управление портом". Обратитесь в службу поддержки, если вам нужна новая учетная запись.  
-    *Учетная запись блокируется при отсутствии активности более 45 дней, для её восстановления потребуется обращение в службу поддержки.*  
+    Подключение выполняется с использованием `BasicAuth` по лигину / паролю. Обратитесь в службу поддержки, если вам нужна учетная запись.  
     
     **Об использовании**  
-    Любой ответ сервиса вернется в обертке [ResponseWrapper](#section/Schemas/ResponseWrapper). Для упрощения в примерах обертка не указана.
+    Любой ответ сервиса вернется в обертке [ResponseWrapper (см. /Ping)](#tag/Other/operation/ping). Для упрощения в примерах обертка не указана.  
+    Информация о любом исключении на стороне сервера направляется разработчику автоматически. В свойстве `result` [ResponseWrapper](#tag/Other/operation/ping) вернется номер зарегистрированной ошибки. Обычно такие проблемы решаются в течение часа.  
+    
+    **Контакты**  
+    Служба поддержки КМТП:  
+    Телефон: +7-962-108-60-85  
+    Telegram: +7-962-108-60-85  
+    e-mail: operator@kmtp.ru  
+    
+    Разработчик:  
+    Telegram: @VitalySerokurov
 
   contact:
-    email: v.serokurov@outlook.com
-  version: v1
+    name: КМТП 
+    email: operator@kmtp.ru
+    url: https://kmtp.ru
 
 servers:
   - url: https://kmtp.info/up/hs/utrack/v1
@@ -25,12 +36,21 @@ x-tagGroups:
     tags:
       - Tracking
       - Other
-      
+#  - name: Схемы данных
+#    tags:
+#      - ResponseWrapper
+#      - CargoShipment
+
 tags:
   - name: Tracking
     description: Отслеживание
   - name: Other
     description: Прочее
+#  - name: CargoShipment
+#    description: <SchemaDefinition schemaRef="#/components/schemas/CargoShipment" />
+#  - name: ResponseWrapper
+#    description: <SchemaDefinition schemaRef="#/components/schemas/ResponseWrapper" />
+
 
 security:
   - BasicAuth: []
@@ -119,15 +139,13 @@ paths:
       requestBody:
         required: true
         description: |
-          array из string  
-          строки для поиска  
-          максимум 100 элементов
+          Cтроки для поиска  
         content:
           application/json:
             schema:
               type: array
               minItems: 1
-              maxItems: 100
+              maxItems: 500
               items:
                 type: string
             examples:
@@ -146,7 +164,6 @@ paths:
       responses:
         '200':
           description: |
-            successful operation  
             array из CargoShipment  
             Новые грузы расположены в начале
           content:
@@ -173,15 +190,13 @@ paths:
       operationId: track
       requestBody:
         required: true
-        description: |
-          array из uuid CargoShipment  
-          максимум 100 элементов
+        description: 'Массив uuid для поиска'
         content:
           application/json:
             schema:
               type: array
               minItems: 1
-              maxItems: 100
+              maxItems: 500
               items:
                 type: string
                 format: uuid
@@ -191,7 +206,6 @@ paths:
       responses:
         '200':
           description: |
-            successful operation  
             array из CargoShipment  
             Новые грузы расположены в начале
           content:
@@ -250,7 +264,7 @@ components:
           description: 'Тип груза: Контейнерный или Генеральный'
           enum:
             - container
-            - genegal
+            - general
         bl_number:
           type: string
           example: "Сах2545V071KХ2533M"
@@ -262,11 +276,14 @@ components:
         label:
           type: string
           example: 'FITU5542380'
-          description: 'Маркировка груза. Для контейнера - его номер. Для генеральных - произвольная, в т.ч. пустая строка.'
+          description: |
+            Маркировка груза  
+            Для контейнера - его номер  
+            Для прочих - произвольная строка, если она была задана при регистрации груза
         title:
           type: string
           example: "FITU 554 2380 HC40' ПЫЛЬ ИНЕРТНАЯ"
-          description: Наименование груза в системе
+          description: Рабочее наименование груза в системе
         is_container_unit:
           type: boolean
           description: Груз это контейнер
@@ -287,15 +304,15 @@ components:
           example: false
           description: Груз это рефрежираторный контейнер
         container_unit_type:
-          type: integer
-          example: 1
+          type: string
+          enum:
+            - ISO
+            - SMALL
+          example: ISO
           description: |
             Идентификатор типа контейнера  
-            1 - морской ISO контейнер  
-            2 - малотоннажный контейнер (3 или 5 тонный) 
-          enum:
-            - 1
-            - 2
+            `ISO` - стандартный морской контейнер  
+            `SMALL` - малотоннажный контейнер (3 или 5 тонный) 
         container_unit_size:
           type: integer
           example: 40
@@ -320,10 +337,10 @@ components:
           type: string
           example: 'PC'
           description: |
-            Единица измерения, в которой ведется учет груза.  
-            Штучные грузы всегда считаются количеством мест (`PC`).  
-            Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (`KG`).  
-            Объемные грузы в кубометрах (`CM`).
+            Единица измерения, в которой ведется учет груза  
+            Штучные грузы всегда считаются количеством мест (`PC`)  
+            Если груз не делится на места (навалочный, насыпной), то считается по весу в килограммах (`KG`)  
+            Объемные грузы в кубометрах (`CM`)
           enum:
             - PC
             - KG
@@ -357,14 +374,12 @@ components:
           items:
             $ref: '#/components/schemas/CargoHandlingEvent'
           description: |
-            array из CargoHandlingEvent  
             События обработки груза
         reefer_events:
           type: array
           items:
             $ref: '#/components/schemas/ReeferEvent'
           description: |
-            array из ReeferEvent  
             События обработки рефконтейнера  
             Только для рефконтейнеров (is_reefer = true)'
 
@@ -418,12 +433,12 @@ components:
           type: number
           format: decimal
           example: 0
-          description: 'Остаток груза на судне'
+          description: 'Остаток груза на судне (на момент запроса)'
         remaining_quantity_yard:
           type: number
           format: decimal
           example: 1
-          description: 'Остаток груза в порту на хранении'
+          description: 'Остаток груза в порту на хранении (на момент запроса)'
         vessel_port_call:
           $ref: '#/components/schemas/VesselPortCall'
 
@@ -579,10 +594,11 @@ components:
         title:
           type: string
           example: 'Причал № 6СР'
-        terminal_id:
+        terminal_code:
           type: integer
           format: int
-          example: 1  
+          example: 1
+          description: 'Уникальный код терминала'
         terminal_title:
           type: string
           example: 'Северный район'
@@ -596,11 +612,11 @@ components:
           type: string
           example: 'Северный район'
           description: Наименование
-        terminal_id:
+        terminal_code:
           type: integer
           format: int
           example: 1
-          description: Внутренний уникальный идентификатор терминала
+          description: 'Уникальный код терминала'
         terminal_title:
           type: string
           example: 'Северный район'
@@ -615,25 +631,25 @@ components:
           type: string
           example: 'X000XX 65 SITRAK'
           description: Наименование
-        plate_number:
+        plate:
           type: string
           example: 'X000XX 65'
           description: Государственный регистрационный знак
-        vehicle_model:
+        model:
           type: string
           example: 'SITRAK БЕЛЫЙ'
-          description: Марка, модель
+          description: Модель автомобиля
 
     CargoCategory:
       x-swagger-router-model: portup.utrack.model.CargoCategory
       type: object
       description: Вид груза
       properties:
-        internal_code:
+        code:
           type: string
           example: 'HC'
           description: |
-            Внутренний уникальный код  
+            Уникальный код 
             Для морских контейнеров используются коды ISO
         title:
           type: string
