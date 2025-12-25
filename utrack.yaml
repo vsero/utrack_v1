@@ -163,9 +163,7 @@ paths:
                   - "ЭД669870"
       responses:
         '200':
-          description: |
-            array из CargoShipment  
-            Новые грузы расположены в начале
+          description: 'Array из CargoShipment'
           content:
             application/json:
               schema:
@@ -205,9 +203,7 @@ paths:
                 - "7b45182b-b61f-11f0-ba8c-a4bf01740730"                    
       responses:
         '200':
-          description: |
-            array из CargoShipment  
-            Новые грузы расположены в начале
+          description: 'Array из CargoShipment'
           content:
             application/json:
               schema:
