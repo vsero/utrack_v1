@@ -29,12 +29,12 @@ info:
     url: https://kmtp.ru
 
 servers:
-  - url: https://kmtp.info/up/hs/utrack/v1
+  - url: https://kmtp.info/up/hs/utrackv1
 
 x-tagGroups:
-  - name: Операции
+  - name: Отслеживание
     tags:
-      - Tracking
+      - Shipment
       - Other
 #  - name: Схемы данных
 #    tags:
@@ -42,10 +42,12 @@ x-tagGroups:
 #      - CargoShipment
 
 tags:
-  - name: Tracking
-    description: Отслеживание
+  - name: Shipment
+    x-displayName: Грузовые отправления
+#    description: Грузовые отправления
   - name: Other
-    description: Прочее
+    x-displayName: Прочее
+#    description: Прочее
 #  - name: CargoShipment
 #    description: <SchemaDefinition schemaRef="#/components/schemas/CargoShipment" />
 #  - name: ResponseWrapper
@@ -70,11 +72,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseWrapper'
-  /search:
+  /shipment/search:
     post:
       tags:
-        - Tracking
-      summary: 'Получить информацию используя фильтр поиска грузовых отправлений'
+        - Shipment
+      summary: 'Получить информацию списком используя фильтр поиска'
       description: |
         В теле передаются строки для поиска  
         Уточняющие условия, если они нужны, передаются в параметрах
@@ -178,12 +180,11 @@ paths:
           description: Unexpected error 
         default:
           description: '500 Unexpected error'
-      
       x-codeSamples:
         - lang: 'HTTP'
           label: 'Поиск груженых контейнеров с моря по номерам'
           source: |
-            POST /search?is_empty_container_unit=false&cargo_flow=inbound
+            POST /shipment/search?is_empty_container_unit=false&cargo_flow=inbound
             Content-Type: application/json
 
             [
@@ -194,16 +195,16 @@ paths:
         - lang: 'HTTP'
           label: 'Поиск по коносаменту'
           source: |
-            POST /search?search_by=bl_number
+            POST /shipment/search?search_by=bl_number
             Content-Type: application/json
 
             ["ЭД786665"]
   
-  /track:
+  /shipment/track:
     post:
       tags:
-        - Tracking
-      summary: 'Получить информацию по uuid грузового отправления'
+        - Shipment
+      summary: 'Получить информацию списком по uuid'
       description: 'В теле передается список uuid полученных ранее с помощью /search'
       operationId: track
       requestBody:
@@ -237,7 +238,43 @@ paths:
         '500':
           description: Unexpected error
         default:
-          description: '500 Unexpected error'  
+          description: '500 Unexpected error'
+                  
+  /shipment{uuid}:
+    get:
+      tags:
+        - Shipment
+      summary: 'Получить информацию по uuid'
+      description: 'Возвращает одиночный объект CargoShipment по его uuid'
+      operationId: track_by_id
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid CargoShipment
+          required: true
+          schema:
+            type: string
+            format: uuid                    
+      responses:
+        '200':
+          description: 'Объект CargoShipment'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CargoShipment'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        '500':
+          description: Unexpected error
+        default:
+          description: '500 Unexpected error'
+      x-codeSamples:
+      - lang: 'HTTP'
+        label: 'Получить CargoShipment по uuid'
+        source: |
+          GET /shipment/a427bf5e-b5ec-11f0-ba8c-a4bf01740730
   
 components:
   schemas:
@@ -455,8 +492,8 @@ components:
           format: decimal
           example: 1
           description: 'Остаток груза в порту на хранении (на момент запроса)'
-        vessel_port_call:
-          $ref: '#/components/schemas/VesselPortCall'
+        vessel_call:
+          $ref: '#/components/schemas/VesselCall'
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
@@ -535,8 +572,8 @@ components:
             - temperature_check
             - alarm
         
-    VesselPortCall:
-      x-swagger-router-model: portup.utrack.model.VesselPortCall
+    VesselCall:
+      x-swagger-router-model: portup.utrack.model.VesselCall
       type: object
       description: Судозаход
       properties:
