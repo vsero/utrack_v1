@@ -65,7 +65,7 @@ paths:
       operationId: ping
       responses:
         '200':
-          description: Успешный ответ от сервиса
+          description: Пустой ResponceWrapper
           content:
             application/json:
               schema:
