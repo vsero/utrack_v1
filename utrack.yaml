@@ -32,7 +32,7 @@ servers:
   - url: https://kmtp.info/up/hs/utrackv1
 
 x-tagGroups:
-  - name: Отслеживание
+  - name: Endpoints
     tags:
       - Shipment
       - Other
