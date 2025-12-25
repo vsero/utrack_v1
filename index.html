@@ -22,8 +22,10 @@
         {
           // Настройки интерфейса
           disableSearch: false,
-          expandDefaultServerVariables: true,
-          hideDownloadButton: false,
+          hideDownloadButton: true,
+          expandDefaultServerVariables: true,         
+          expandResponses: "none", // Сворачивает все примеры ответов по умолчанию
+          requiredPropsFirst: true,
           scrollYOffset: 0
         },
         document.getElementById('redoc-container')
@@ -31,3 +33,4 @@
     </script>
   </body>
 </html>
+
