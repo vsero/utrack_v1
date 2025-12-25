@@ -36,22 +36,16 @@ x-tagGroups:
     tags:
       - Shipment
       - Other
-#  - name: Схемы данных
-#    tags:
-#      - ResponseWrapper
-#      - CargoShipment
+  - name: Схема данных
+    tags:
+      - Shema
 
 tags:
   - name: Shipment
     x-displayName: Грузовые отправления
-#    description: Грузовые отправления
   - name: Other
     x-displayName: Прочее
-#    description: Прочее
-#  - name: CargoShipment
-#    description: <SchemaDefinition schemaRef="#/components/schemas/CargoShipment" />
-#  - name: ResponseWrapper
-#    description: <SchemaDefinition schemaRef="#/components/schemas/ResponseWrapper" />
+  - name: Schema
 
 
 security:
