@@ -234,7 +234,7 @@ paths:
         default:
           description: '500 Unexpected error'
                   
-  /shipment{uuid}:
+  /shipment/{uuid}:
     get:
       tags:
         - Shipment
