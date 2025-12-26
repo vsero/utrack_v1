@@ -488,8 +488,23 @@ components:
           format: decimal
           example: 1
           description: 'Остаток груза в порту на хранении (на момент запроса)'
-        vessel_call:
-          $ref: '#/components/schemas/VesselCall'
+        vessel_call_uuid:
+          type: string
+          format: uuid
+          example: 'c0c13efc-b61e-11f0-ba8c-a4bf01740730'
+          description: uuid судозахода
+        vessel_call_number:
+          type: string
+          example: '25129'
+          description: |
+            Номер судозахода
+            Может быть составным, напр. 2546/2564
+        vessel_call_title:
+          type: string
+          example: '25129 С.ГАВРИЛОВ'
+          description: Рабочее наименование судозахода
+#        vessel_call:
+#          $ref: '#/components/schemas/VesselCall'
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
