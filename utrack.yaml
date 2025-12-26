@@ -409,7 +409,7 @@ components:
           type: string
           format: uuid
           example: '3584b2d1-a597-11f0-ba8a-a4bf01740731'
-          description: Внутренний уникальный идентификатор
+          description: Уникальный идентификатор грузового отправления
         declared_timestamp:
           type: string
           format: date-time
@@ -440,7 +440,7 @@ components:
         title:
           type: string
           example: "FITU 554 2380 HC40' ПЫЛЬ ИНЕРТНАЯ"
-          description: Рабочее наименование груза в системе
+          description: 'Рабочее наименование груза'
         is_container_unit:
           type: boolean
           description: Груз это контейнер
@@ -563,7 +563,7 @@ components:
           description: Дата окончания обработки
         cargo_flow:
           type: string
-          description: "Направление движения груза: На сушу (`inbound`) или На море (`outbound`)"
+          description: 'Направление движения груза: На сушу (`inbound`) или На море (`outbound`)'
           enum:
             - inbound
             - outbound
