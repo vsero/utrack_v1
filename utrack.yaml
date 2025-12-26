@@ -36,15 +36,18 @@ servers:
 x-tagGroups:
   - name: Endpoints
     tags:
-      - Shipment
+      - shipment
+      - vesselcall
       - Other
   - name: Схема данных
     tags:
       - Shema
 
 tags:
-  - name: Shipment
+  - name: shipment
     x-displayName: Грузовые отправления
+  - name: vesselcall
+    x-displayName: Судозаходы
   - name: Other
     x-displayName: Прочее
   - name: Schema
@@ -71,8 +74,8 @@ paths:
   /shipment/search:
     post:
       tags:
-        - Shipment
-      summary: 'Получить информацию списком используя фильтр поиска'
+        - shipment
+      summary: 'Получить списком используя фильтр поиска'
       description: |
         В теле передаются строки для поиска  
         Уточняющие условия, если они нужны, передаются в параметрах
@@ -199,13 +202,13 @@ paths:
   /shipment/batch:
     post:
       tags:
-        - Shipment
-      summary: 'Получить информацию списком по uuid'
-      description: 'В теле передается список uuid полученных ранее с помощью /search'
-      operationId: batch
+        - shipment
+      summary: 'Получить списком по uuid'
+      description: 'В теле передается список `uuid` полученных ранее с помощью /search'
+      operationId: shipment_batch
       requestBody:
         required: true
-        description: 'Массив uuid для поиска'
+        description: 'Массив из uuid'
         content:
           application/json:
             schema:
@@ -239,10 +242,10 @@ paths:
   /shipment/{uuid}:
     get:
       tags:
-        - Shipment
-      summary: 'Получить информацию по uuid'
+        - shipment
+      summary: 'Получить по uuid'
       description: 'Возвращает одиночный объект CargoShipment по его uuid'
-      operationId: track_by_id
+      operationId: shipment_uuid
       parameters:
         - name: uuid
           in: path
@@ -272,6 +275,108 @@ paths:
         source: |
           GET /shipment/a427bf5e-b5ec-11f0-ba8c-a4bf01740730
   
+  /vesselcall/batch:
+    post:
+      tags:
+        - vesselcall
+      summary: 'Получить списком по uuid'
+      description: 'В теле передается список `vessel_call_uuid`'
+      operationId: vesselcall_batch
+      requestBody:
+        required: true
+        description: 'Массив из uuid'
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 500
+              items:
+                type: string
+                format: uuid
+              example:
+                - "c0c13efc-b61e-11f0-ba8c-a4bf01740730"
+                - "c2416ccd-a595-11f0-ba8a-a4bf01740731"                    
+      responses:
+        '200':
+          description: 'Array из VesselCall'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VesselCall'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        '500':
+          description: Unexpected error
+        default:
+          description: '500 Unexpected error'
+          
+  /vesselcall/list:
+    get:
+      tags:
+        - vesselcall
+      summary: 'Получить все активные'
+      description: 'Возвращает все судозаходы, обработка которых не завершена (под обработкой, на рейде, заявленные)'
+      operationId: vesselcall_list                   
+      responses:
+        '200':
+          description: 'Array из VesselCall'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VesselCall'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        '500':
+          description: Unexpected error
+        default:
+          description: '500 Unexpected error'        
+  
+  /vesselcall/{uuid}:
+    get:
+      tags:
+        - vesselcall
+      summary: 'Получить по uuid'
+      description: 'Возвращает одиночный объект VesselCall по его uuid'
+      operationId: vesselcall_uuid
+      parameters:
+        - name: uuid
+          in: path
+          description: vessel_call_uuid
+          required: true
+          schema:
+            type: string
+            format: uuid                    
+      responses:
+        '200':
+          description: 'Объект VesselCall'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CargoShipment'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        '500':
+          description: Unexpected error
+        default:
+          description: '500 Unexpected error'
+      x-codeSamples:
+      - lang: 'HTTP'
+        label: 'Получить CargoShipment по uuid'
+        source: |
+          GET /shipment/c2416ccd-a595-11f0-ba8a-a4bf01740731
+          
+          
 components:
   schemas:
     
@@ -497,7 +602,7 @@ components:
           type: string
           example: '25129'
           description: |
-            Номер судозахода
+            Номер судозахода  
             Может быть составным, напр. 2546/2564
         vessel_call_title:
           type: string
@@ -725,5 +830,5 @@ components:
     ApiKeyAuth:        
       type: apiKey
       in: header
-      name: x-api-key
+      name: X-Api-Key
       description: 'Ваш токен доступа'
