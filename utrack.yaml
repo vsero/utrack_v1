@@ -107,7 +107,7 @@ paths:
           schema:
             type: string
             enum:
-              - iso-container
+              - isoContainer
               - general
         - name: cargo_flow
           in: query
@@ -487,10 +487,10 @@ components:
           description: 'Заявленный объем в кубометрах'
         cargo_type:
           type: string
-          example: iso-container
+          example: isoContainer
           description: 'Тип груза: Контейнерный или Генеральный'
           enum:
-            - iso-container
+            - isoContainer
             - general
         container_unit_type:
           type: string
@@ -639,17 +639,17 @@ components:
             Тип события:  
             `unloading` - выгрузка  
             `loading` - погрузка  
-            `gate-in` - завоз через КПП  
-            `gate-out` - вывоз через КПП  
-            `yard-in` - помещение на площадку  
-            `yard-out` - снятие с площадки
+            `gateIn` - завоз через КПП  
+            `gateOut` - вывоз через КПП  
+            `yardIn` - помещение на площадку  
+            `yardOut` - снятие с площадки
           enum:
             - unloading
             - loading
-            - gate-in
-            - gate-out
-            - yard-in
-            - yard-out
+            - gateIn
+            - gateOut
+            - yardIn
+            - yardOut
         allocated_quantity:
           type: number
           format: decimal
@@ -835,7 +835,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VesselHandlingTotalsRow'
-          description: Итоговые показатели обработки судна        
+          description: Таблица итогов обработки судна        
     
     VesselHandlingSummary:
       x-swagger-router-model: portup.utrack.model.VesselHandlingSummary
@@ -875,7 +875,7 @@ components:
     VesselHandlingTotalsRow:
       x-swagger-router-model: portup.utrack.model.VesselHandlingTotalsRow
       type: object
-      description: Строка итоговых показателей обработки судна
+      description: Строка таблицы итогов обработки судна
       properties:
         vessel_handling_type:
           type: string
@@ -886,10 +886,10 @@ components:
           description: Тип обработки судна - выгрузка или погрузка
         cargo_type:
           type: string
-          example: iso-container
+          example: isoContainer
           description: 'Тип груза: Контейнерный или Генеральный'
           enum:
-            - iso-container
+            - isoContainer
             - general  
         is_empty_container_unit:
           type: boolean
