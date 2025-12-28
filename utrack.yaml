@@ -107,7 +107,7 @@ paths:
           schema:
             type: string
             enum:
-              - container
+              - iso-container
               - general
         - name: cargo_flow
           in: query
@@ -222,7 +222,7 @@ paths:
                 type: string
                 format: uuid
               example:
-                - "3584b2d1-a597-11f0-ba8a-a4bf01740731"
+                - "318f9e91-aed6-11f0-ba8a-a4bf01740731"
                 - "7b45182b-b61f-11f0-ba8c-a4bf01740730"                    
       responses:
         '200':
@@ -276,7 +276,7 @@ paths:
       - lang: 'HTTP'
         label: 'Получить CargoShipment по uuid'
         source: |
-          GET /shipment/a427bf5e-b5ec-11f0-ba8c-a4bf01740730
+          GET /shipment/318f9e91-aed6-11f0-ba8a-a4bf01740731
   
   /vesselcall/batch:
     post:
@@ -408,38 +408,31 @@ components:
         uuid:
           type: string
           format: uuid
-          example: '3584b2d1-a597-11f0-ba8a-a4bf01740731'
+          example: '318f9e91-aed6-11f0-ba8a-a4bf01740731'
           description: Уникальный идентификатор грузового отправления
         declared_timestamp:
           type: string
           format: date-time
           example: '2025-10-10T16:08:40+11:00'
           description: Дата регистрации груза в системе
-        cargo_type:
-          type: string
-          example: container
-          description: 'Тип груза: Контейнерный или Генеральный'
-          enum:
-            - container
-            - general
         bl_number:
           type: string
           example: "Сах2545V071KХ2533M"
           description: Номер коносамента
         contents:
           type: string
-          example: 'ПЫЛЬ ИНЕРТНАЯ'
+          example: 'овощи свежие'
           description: Описание груза, содержимого
         label:
           type: string
-          example: 'FITU5542380'
+          example: 'DLTU9018145'
           description: |
             Маркировка груза  
             Для контейнера - его номер  
             Для прочих - произвольная строка, если она была задана при регистрации груза
         title:
           type: string
-          example: "FITU 554 2380 HC40' ПЫЛЬ ИНЕРТНАЯ"
+          example: "DLTU 901 8145 RFHC40' овощи свежие"
           description: 'Рабочее наименование груза'
         is_container_unit:
           type: boolean
@@ -458,38 +451,8 @@ components:
           description: Груз опасный
         is_reefer:
           type: boolean
-          example: false
+          example: true
           description: Груз это рефрежираторный контейнер
-        container_unit_type:
-          type: string
-          enum:
-            - ISO
-            - SMALL
-          example: ISO
-          description: |
-            Идентификатор типа контейнера  
-            `ISO` - стандартный морской контейнер  
-            `SMALL` - малотоннажный контейнер (3 или 5 тонный) 
-        container_unit_size:
-          type: integer
-          example: 40
-          description: |
-            Идентификатор типоразмера контейнера  
-            10 - морской контейнер 10 футов  
-            20 - морской контейнер 20 футов  
-            30 - морской контейнер 30 футов  
-            40 - морской контейнер 40 футов  
-            45 - морской контейнер 45 футов  
-            3 - малотоннажный контейнер 3 тонны  
-            5 - малотоннажный контейнер 5 тонн
-          enum:
-            - 10
-            - 20
-            - 30
-            - 40
-            - 45
-            - 3
-            - 5
         quantity_unit:
           type: string
           example: 'PC'
@@ -522,8 +485,53 @@ components:
           format: decimal
           example: 0
           description: 'Заявленный объем в кубометрах'
-        cargo_category:
-          $ref: '#/components/schemas/CargoCategory'
+        cargo_type:
+          type: string
+          example: iso-container
+          description: 'Тип груза: Контейнерный или Генеральный'
+          enum:
+            - iso-container
+            - general
+        container_unit_type:
+          type: string
+          enum:
+            - ISO
+            - SMALL
+          example: ISO
+          description: |
+            Идентификатор типа контейнера  
+            `ISO` - стандартный морской контейнер  
+            `SMALL` - малотоннажный контейнер (3 или 5 тонный) 
+        container_unit_size:
+          type: integer
+          example: 40
+          description: |
+            Идентификатор типоразмера контейнера  
+            10 - морской контейнер 10 футов  
+            20 - морской контейнер 20 футов  
+            30 - морской контейнер 30 футов  
+            40 - морской контейнер 40 футов  
+            45 - морской контейнер 45 футов  
+            3 - малотоннажный контейнер 3 тонны  
+            5 - малотоннажный контейнер 5 тонн
+          enum:
+            - 10
+            - 20
+            - 30
+            - 40
+            - 45
+            - 3
+            - 5
+        cargo_category_code:
+          type: string
+          example: 'RFHC'
+          description: |
+            Уникальный код вида груза   
+            Для морских контейнеров используются коды ISO
+        cargo_category_title:
+          type: string
+          example: 'Рефконтейнер, высокий'
+          description: 'Наименование вида груза' 
         cargo_handling_summary:
           $ref: '#/components/schemas/CargoHandlingSummary'
         cargo_handling_events:
@@ -543,7 +551,7 @@ components:
     CargoHandlingSummary:
       x-swagger-router-model: portup.utrack.model.CargoHandlingSummary
       type: object
-      description: 'Сводные данные об обработке груза'
+      description: 'Сводка по обработке груза'
       properties:
         is_started:
           type: boolean
@@ -691,50 +699,6 @@ components:
             - temperature_check
             - alarm
         
-    VesselCall:
-      x-swagger-router-model: portup.utrack.model.VesselCall
-      type: object
-      description: Судозаход
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          example: 'c2416ccd-a595-11f0-ba8a-a4bf01740731'
-          description: Внутренний уникальный идентификатор
-        voyage_number:
-          type: string
-          example: '2545/2562'
-          description: 'Номер рейса / рейсов'
-        title:
-          type: string
-          example: '2545/2562 СИМУШИР'
-          description: Наименование
-        vessel:
-          $ref: '#/components/schemas/Vessel'
-        port_of_loading:
-          $ref: '#/components/schemas/Port'
-        port_of_destination:
-          $ref: '#/components/schemas/Port'
-
-    Vessel:
-      x-swagger-router-model: portup.utrack.model.Vessel
-      type: object
-      description: Судно
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          example: '8491c51c-f492-11ef-ba81-a4bf01740731'
-          description: Уникальный идентификатор
-        title:
-          type: string
-          example: 'К.МАЛАХОВ'
-          description: Наименование
-        callsign:
-          type: string
-          example: 'FKDL'
-          description: Позывной
-        
     Port:
       x-swagger-router-model: portup.utrack.model.Port
       type: object
@@ -811,24 +775,147 @@ components:
           type: string
           example: 'SITRAK БЕЛЫЙ'
           description: Модель автомобиля
-
-    CargoCategory:
-      x-swagger-router-model: portup.utrack.model.CargoCategory
+    
+    Vessel:
+      x-swagger-router-model: portup.utrack.model.Vessel
       type: object
-      description: Вид груза
+      description: Судно
       properties:
-        code:
+        uuid:
           type: string
-          example: 'HC'
-          description: |
-            Уникальный код   
-            Для морских контейнеров используются коды ISO
+          format: uuid
+          example: '8491c51c-f492-11ef-ba81-a4bf01740731'
+          description: Уникальный идентификатор
         title:
           type: string
-          example: 'Сухой, высокий'
+          example: 'К.МАЛАХОВ'
           description: Наименование
-       
-        
+        callsign:
+          type: string
+          example: 'FKDL'
+          description: Позывной
+    
+    VesselCall:
+      x-swagger-router-model: portup.utrack.model.VesselCall
+      type: object
+      description: Судозаход
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 'c2416ccd-a595-11f0-ba8a-a4bf01740731'
+          description: Внутренний уникальный идентификатор
+        voyage_number:
+          type: string
+          example: '2545/2562'
+          description: 'Номер рейса / рейсов'
+        title:
+          type: string
+          example: '2545/2562 СИМУШИР'
+          description: Наименование
+        declared_timestamp:
+          type: string
+          format: date-time
+          example: '2025-10-31T16:10:00+11:00'
+          description: Дата регистрации судозахода в системе
+        estimated_arrival_date:
+          type: string
+          format: date-time
+          example: '2025-11-11T00:00:00+11:00'
+          description: Плановая дата прибытия судна
+        port_of_departure:
+          $ref: '#/components/schemas/Port'
+        port_of_destination:
+          $ref: '#/components/schemas/Port'
+        vessel:
+          $ref: '#/components/schemas/Vessel'
+        vessel_handling_summary:
+          $ref: '#/components/schemas/VesselHandlingSummary'
+        vessel_handling_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/VesselHandlingTotalsRow'
+          description: Итоговые показатели обработки судна        
+    
+    VesselHandlingSummary:
+      x-swagger-router-model: portup.utrack.model.VesselHandlingSummary
+      type: object
+      description: Сводка по обработке судна
+      properties:
+        start_waiting_timestamp:
+          type: string
+          format: date-time
+          example: '2025-11-12T03:10:00+11:00'
+          description: Дата начала ожидания на рейде
+        start_unloading_timestamp:
+          type: string
+          format: date-time
+          example: '2025-11-13T14:19:14+11:00'
+          description: Дата начала выгрузки
+        start_loading_timestamp:
+          type: string
+          format: date-time
+          example: '2025-11-14T14:03:40+11:00'
+          description: Дата начала погрузки
+        departure_timestamp:
+          type: string
+          format: date-time
+          example: '0001-01-01T00:00:00+00:00'
+          description: Дата отхода
+        is_finished:
+          type: boolean
+          example: false
+          description: Обработка завершена
+        is_finished_timestamp:
+          type: string
+          format: date-time
+          example: '0001-01-01T00:00:00+00:00'
+          description: Дата завершения обработки
+    
+    VesselHandlingTotalsRow:
+      x-swagger-router-model: portup.utrack.model.VesselHandlingTotalsRow
+      type: object
+      description: Строка итоговых показателей обработки судна
+      properties:
+        vessel_handling_type:
+          type: string
+          enum: 
+            - unloading
+            - loading
+          example: 'unloading'
+          description: Тип обработки судна - выгрузка или погрузка
+        cargo_type:
+          type: string
+          example: iso-container
+          description: 'Тип груза: Контейнерный или Генеральный'
+          enum:
+            - iso-container
+            - general  
+        is_empty_container_unit:
+          type: boolean
+          example: false
+          description: Груз это порожний контейнер или нет
+        declared_pieces:
+          type: integer
+          format: int
+          example: 249
+          description: 'Заявленное количество мест'
+        declared_weight:
+          type: number
+          format: decimal
+          example: 5098558
+          description: 'Заявленный вес в килограммах'
+        handled_pieces:
+          type: integer
+          format: int
+          example: 249
+          description: 'Обработанное количество мест'
+        handled_weight:
+          type: number
+          format: decimal
+          example: 5098558
+          description: 'Обработанный вес в килограммах'  
+          
   securitySchemes:
     ApiKeyAuth:        
       type: apiKey
