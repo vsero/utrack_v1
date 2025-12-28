@@ -663,7 +663,7 @@ components:
       type: object
       description: |
         Место грузообработки  
-        Объект будет содержать только одно из нижеперечисленных свойств
+        Объект будет содержать <u>только одно</u> свойство
       properties:
         vehicle:
           $ref: '#/components/schemas/Vehicle'
