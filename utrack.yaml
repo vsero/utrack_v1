@@ -107,7 +107,7 @@ paths:
           schema:
             type: string
             enum:
-              - isoContainer
+              - iso_container
               - general
         - name: cargo_flow
           in: query
@@ -487,10 +487,10 @@ components:
           description: 'Заявленный объем в кубометрах'
         cargo_type:
           type: string
-          example: isoContainer
+          example: iso_container
           description: 'Тип груза: Контейнерный или Генеральный'
           enum:
-            - isoContainer
+            - iso_container
             - general
         container_unit_type:
           type: string
@@ -579,10 +579,10 @@ components:
           type: string
           description: |
             Тип перевалки:  
-            Внутрипортовая (`inPort`) - с помещением груза на площадку  
+            Внутрипортовая (`in_port`) - с помещением груза на площадку  
             Прямая (`direct`) - без помещения груза на площадку (перевалка с судна на машину или с машины на судно)
           enum:
-            - "inPort"
+            - "in_port"
             - "direct"
         storage_start_timestamp:
           type: string
@@ -637,17 +637,17 @@ components:
             Тип события:  
             `unloading` - выгрузка  
             `loading` - погрузка  
-            `gateIn` - завоз через КПП  
-            `gateOut` - вывоз через КПП  
-            `yardIn` - помещение на площадку  
-            `yardOut` - снятие с площадки
+            `gate_in` - завоз через КПП  
+            `gate_out` - вывоз через КПП  
+            `yard_in` - помещение на площадку  
+            `yard_out` - снятие с площадки
           enum:
             - unloading
             - loading
             - gateIn
             - gateOut
-            - yardIn
-            - yardOut
+            - yard_in
+            - yard_out
         allocated_quantity:
           type: number
           format: decimal
@@ -884,10 +884,10 @@ components:
           description: Тип обработки судна - выгрузка или погрузка
         cargo_type:
           type: string
-          example: isoContainer
+          example: iso_container
           description: 'Тип груза: Контейнерный или Генеральный'
           enum:
-            - isoContainer
+            - iso_container
             - general  
         is_empty_container_unit:
           type: boolean
