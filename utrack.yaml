@@ -579,10 +579,10 @@ components:
           type: string
           description: |
             Тип перевалки:  
-            Внутрипортовая (`in-port`) - с помещением груза на площадку  
+            Внутрипортовая (`inPort`) - с помещением груза на площадку  
             Прямая (`direct`) - без помещения груза на площадку (перевалка с судна на машину или с машины на судно)
           enum:
-            - "in-port"
+            - "inPort"
             - "direct"
         storage_start_timestamp:
           type: string
@@ -619,8 +619,6 @@ components:
           type: string
           example: '25129 С.ГАВРИЛОВ'
           description: Рабочее наименование судозахода
-#        vessel_call:
-#          $ref: '#/components/schemas/VesselCall'
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
