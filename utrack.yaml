@@ -646,8 +646,8 @@ components:
           enum:
             - unloading
             - loading
-            - gateIn
-            - gateOut
+            - gate_in
+            - gate_out
             - yard_in
             - yard_out
         allocated_quantity:
