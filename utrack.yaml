@@ -14,10 +14,7 @@ info:
     <u>Токен</u>  
     Для выполнения запросов нужен токен доступа, который передается в заголовках ключем `X-Api-Key`. Для упрощения в примерах токен не указан.  
     Свяжитесь со службой поддержки, чтобы получить свой токен.  
-    
-    <u>Ответы</u>  
-    Любой ответ сервиса вернется в обертке [ResponseWrapper](#schema/ResponseWrapper). Для упрощения в примерах обертка не указана.  
-    
+     
     <u>Ошибки</u>     
     Информация о любом исключении на стороне сервера (код ответа 500) направляется разработчику автоматически. Если это произошло, попробуйте повторить запрос через пару часов.  
     
@@ -62,6 +59,7 @@ security:
   - ApiKeyAuth: []
 
 paths:
+  
   /ping:
     get:
       tags:
@@ -71,11 +69,8 @@ paths:
       operationId: ping
       responses:
         '200':
-          description: Пустой ResponseWrapper
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseWrapper'
+          description: Успех
+
   /shipment/search:
     post:
       tags:
@@ -249,12 +244,12 @@ paths:
       tags:
         - shipment
       summary: 'Получить по uuid'
-      description: 'Возвращает одиночный объект CargoShipment по его uuid'
+      description: 'Возвращает одиночный объект ShipmentTrack по его uuid'
       operationId: shipment_uuid
       parameters:
         - name: uuid
           in: path
-          description: uuid CargoShipment
+          description: uuid ShipmentTrack
           required: true
           schema:
             type: string
@@ -276,7 +271,7 @@ paths:
           description: '500 Unexpected error'
       x-codeSamples:
       - lang: 'HTTP'
-        label: 'Получить CargoShipment по uuid'
+        label: 'Получить ShipmentTrack по uuid'
         source: |
           GET /shipment/318f9e91-aed6-11f0-ba8a-a4bf01740731
   
@@ -384,24 +379,7 @@ paths:
           
 components:
   schemas:
-    
-    ResponseWrapper:
-      x-swagger-router-model: portup.utrack.model.ResponseWrapper
-      type: object
-      description: |
-        Обертка ответа  
-        Любой ответ сервиса вернется в этой обертке
-      properties:
-        ok:
-          type: boolean
-          description: true в случае успешного выполнения запроса
-          example: true
-        result:
-          description: |
-            В случае успешного выполнения запроса - результат  
-            В случае ошибки - string, её описание
-          example: {}
-   
+      
     CargoShipment:
       x-swagger-router-model: portup.utrack.model.CargoShipment
       type: object
@@ -534,27 +512,6 @@ components:
           type: string
           example: 'Рефконтейнер, высокий'
           description: 'Наименование вида груза' 
-        cargo_handling_summary:
-          $ref: '#/components/schemas/CargoHandlingSummary'
-        cargo_handling_events:
-          type: array
-          items:
-            $ref: '#/components/schemas/CargoHandlingEvent'
-          description: |
-            События обработки груза
-        reefer_events:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReeferEvent'
-          description: |
-            События обработки рефконтейнера  
-            Только для рефконтейнеров (is_reefer = true)'
-
-    CargoHandlingSummary:
-      x-swagger-router-model: portup.utrack.model.CargoHandlingSummary
-      type: object
-      description: 'Сводка по обработке груза'
-      properties:
         is_started:
           type: boolean
           description: Обработка груза начата
@@ -621,18 +578,31 @@ components:
           type: string
           example: '25129 С.ГАВРИЛОВ'
           description: Рабочее наименование судозахода
+        handling_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CargoHandlingEvent'
+          description: |
+            События обработки груза
+        reefer_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReeferEvent'
+          description: |
+            События обработки рефконтейнера  
+            Только для рефконтейнеров (is_reefer = true)'
 
     CargoHandlingEvent:
       x-swagger-router-model: portup.utrack.model.CargoHandlingEvent
       type: object
       description: 'Событие грузообработки'
       properties:
-        event_timestamp:
+        timestamp:
           type: string
           format: date-time
           example: '2025-10-21T01:00:43+11:00'
           description: Дата события
-        cargo_handling_event_type:
+        type:
           type: string
           example: unloading
           description: |
@@ -650,12 +620,12 @@ components:
             - gate_out
             - yard_in
             - yard_out
-        allocated_quantity:
+        quantity:
           type: number
           format: decimal
           example: 1
           description: Количество груза
-        cargo_handling_event_location:
+        location:
           $ref: '#/components/schemas/CargoHandlingEventLocation'
 
     CargoHandlingEventLocation:
@@ -679,12 +649,12 @@ components:
       type: object
       description: 'Событие обработки рефконтейнера'
       properties:
-        event_timestamp:
+        timestamp:
           type: string
           format: date-time
           example: '2025-10-21T01:00:43+11:00'
           description: Дата события
-        reefer_event_type:
+        type:
           type: string
           example: temperature_check
           description: |
@@ -823,25 +793,6 @@ components:
           format: date-time
           example: '2025-11-11T00:00:00+11:00'
           description: Плановая дата прибытия судна
-        port_of_departure:
-          $ref: '#/components/schemas/Port'
-        port_of_destination:
-          $ref: '#/components/schemas/Port'
-        vessel:
-          $ref: '#/components/schemas/Vessel'
-        vessel_handling_summary:
-          $ref: '#/components/schemas/VesselHandlingSummary'
-        vessel_handling_totals:
-          type: array
-          items:
-            $ref: '#/components/schemas/VesselHandlingTotalsRow'
-          description: Таблица итогов обработки судна        
-    
-    VesselHandlingSummary:
-      x-swagger-router-model: portup.utrack.model.VesselHandlingSummary
-      type: object
-      description: Сводка по обработке судна
-      properties:
         start_waiting_timestamp:
           type: string
           format: date-time
@@ -871,13 +822,24 @@ components:
           format: date-time
           example: '0001-01-01T00:00:00+00:00'
           description: Дата завершения обработки
-    
+        port_of_departure:
+          $ref: '#/components/schemas/Port'
+        port_of_destination:
+          $ref: '#/components/schemas/Port'
+        vessel:
+          $ref: '#/components/schemas/Vessel'
+        handling_totals:
+          type: array
+          items:
+            $ref: '#/components/schemas/VesselHandlingTotalsRow'
+          description: Таблица итогов обработки судна        
+        
     VesselHandlingTotalsRow:
       x-swagger-router-model: portup.utrack.model.VesselHandlingTotalsRow
       type: object
       description: Строка таблицы итогов обработки судна
       properties:
-        vessel_handling_type:
+        handling_type:
           type: string
           enum: 
             - unloading
