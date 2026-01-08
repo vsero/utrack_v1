@@ -234,6 +234,8 @@ paths:
                   $ref: '#/components/schemas/CargoShipment'
         '204':
           description: No Content
+        '400':
+          description: Invalid input
         '422':
           description: Validation exception
         '500':
@@ -265,6 +267,8 @@ paths:
                 $ref: '#/components/schemas/CargoShipment'
         '204':
           description: No Content
+        '400':
+          description: Invalid input
         '404':
           description: Not found  
         '422':
@@ -312,6 +316,8 @@ paths:
                   $ref: '#/components/schemas/VesselCall'
         '204':
           description: No Content
+        '400':
+          description: Invalid input
         '422':
           description: Validation exception
         '500':
@@ -337,6 +343,8 @@ paths:
                   $ref: '#/components/schemas/VesselCall'
         '204':
           description: No Content
+        '400':
+          description: Invalid input
         '422':
           description: Validation exception
         '500':
@@ -368,6 +376,8 @@ paths:
                 $ref: '#/components/schemas/CargoShipment'
         '204':
           description: No Content
+        '400':
+          description: Invalid input
         '404':
           description: Not found
         '422':
