@@ -171,6 +171,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CargoShipment'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -230,6 +232,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CargoShipment'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -261,6 +265,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CargoShipment'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -306,6 +312,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VesselCall'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -331,6 +339,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VesselCall'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -362,6 +372,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CargoShipment'
+        '204':
+          description: No Content
         '400':
           description: Invalid input
         '422':
