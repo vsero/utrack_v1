@@ -112,13 +112,13 @@ paths:
         - name: cargo_flow
           in: query
           description: |
-            Фильтр по направлению движения груза: входящий (на сушу) или исходящий (на море)
+            Фильтр по направлению движения груза: с моря или с суши
           required: false
           schema:
             type: string
             enum:
-              - inbound
-              - outbound
+              - from_sea
+              - from_land
         - name: is_container_unit
           in: query
           description: |
@@ -188,7 +188,7 @@ paths:
         - lang: 'HTTP'
           label: 'Поиск груженых контейнеров с моря по номерам'
           source: |
-            POST /shipment/search?is_empty_container_unit=false&cargo_flow=inbound
+            POST /shipment/search?is_empty_container_unit=false&cargo_flow=from_sea
             Content-Type: application/json
 
             [
@@ -549,10 +549,10 @@ components:
           description: Дата окончания обработки
         cargo_flow:
           type: string
-          description: 'Направление движения груза: На сушу (`inbound`) или На море (`outbound`)'
+          description: 'Направление движения груза: с моря (`from_sea`) или с суши (`from_land`)'
           enum:
-            - inbound
-            - outbound
+            - from_sea
+            - from_land
         transshipment_type:
           type: string
           description: |
