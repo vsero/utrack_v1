@@ -172,7 +172,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/CargoShipment'
         '204':
-          description: No Content - Запрос выполнен, данные отсутствуют
+          description: No Content
         '400':
           description: Invalid input
         '422':
@@ -848,7 +848,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VesselHandlingTotalsRow'
-          description: Таблица итогов обработки судна        
+          description: Таблица итогов обработки судна (на момент запроса)
         
     VesselHandlingTotalsRow:
       x-swagger-router-model: portup.utrack.model.VesselHandlingTotalsRow
